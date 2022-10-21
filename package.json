@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@colony/sdk": "^0.6.2",
     "asn1.js": "^5.4.1",
     "aws-sdk": "^2.1237.0",
     "dotenv": "^16.0.3",

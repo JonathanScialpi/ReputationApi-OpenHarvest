@@ -7,7 +7,10 @@ const dotenv = require('dotenv');
 dotenv.config({ path: '../.env' });
 const kms = kmsAuth();
 
-router.post('/createEthAccount', async(req,res) => {
+/// @notice Rest endpoint responsible for creating an Ethereum Address for a given farmerId
+/// @param farmerId (STRING)  is the UUID of the farmer which will be used as the ALIAS of the KMS key in AWS
+/// @returns ethereumAddress e.g. {"ethereumAddress": STRING}
+router.post('/', async(req,res) => {
     console.log("req: ", req.body.farmerId)
     try{
         //Create Key
@@ -32,7 +35,7 @@ router.post('/createEthAccount', async(req,res) => {
         
         const farmerSigner = new AwsKmsSigner(keyId);
         const ethAddress = await farmerSigner.getAddress();
-        res.status(200).json({ethereumAddress : ethAddress}); 
+        res.status(200).json({ethereum_address : ethAddress}); 
     }catch(e){
         res.status(400).json({error: e.toString()});
     }
