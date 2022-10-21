@@ -1,6 +1,6 @@
 require('dotenv').config();
-const express = require("express");
-// import eventRoute from "./routes/event-route";
+import express from "express";
+const keyManagementRoute = require('./routes/key-management-route')
 const port = process.env.PORT;
 const app = express();
 
@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use("/api", eventRoute);
+app.use("/api", keyManagementRoute);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`)

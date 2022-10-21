@@ -1,9 +1,14 @@
-const express = require('express');
+import express from "express";
+import { kmsAuth } from '../web3/authentication-functions';
+import { AwsKmsSigner } from '../web3/AwsKmsSigner';
+
 const router = express.Router();
 const dotenv = require('dotenv');
 dotenv.config({ path: '../.env' });
+const kms = kmsAuth();
 
 router.post('/createEthAccount', async(req,res) => {
+    console.log("req: ", req.body.farmerId)
     try{
         //Create Key
         const cmk = await kms.createKey({
@@ -24,11 +29,12 @@ router.post('/createEthAccount', async(req,res) => {
             GranteePrincipal : process.env.OPEN_HARVEST_APPLICATION_USER_ARN,
             Operations : ['GetPublicKey', 'Sign']
         }).promise();
-
-        const ethAddress = kms.getEthereumAddress(kms.getPublicKey(keyId));
+        
+        const farmerSigner = new AwsKmsSigner(keyId);
+        const ethAddress = await farmerSigner.getAddress();
         res.status(200).json({ethereumAddress : ethAddress}); 
     }catch(e){
-        res.status(500).json(e);
+        res.status(400).json({error: e.toString()});
     }
 });
 

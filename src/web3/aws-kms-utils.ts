@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { KMS } from "aws-sdk";
-import * as asn1 from "asn1";
+import * as asn1 from "asn1.js";
 import BN from "bn.js";
 import { kmsAuth } from "./authentication-functions";
  
