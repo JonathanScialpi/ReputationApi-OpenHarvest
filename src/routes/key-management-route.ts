@@ -11,7 +11,6 @@ const kms = kmsAuth();
 /// @param farmerId (STRING)  is the UUID of the farmer which will be used as the ALIAS of the KMS key in AWS
 /// @returns ethereumAddress e.g. {"ethereumAddress": STRING}
 router.post('/', async(req,res) => {
-    console.log("req: ", req.body.farmerId)
     try{
         //Create Key
         const cmk = await kms.createKey({
