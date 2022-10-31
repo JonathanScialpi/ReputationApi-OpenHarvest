@@ -22,7 +22,7 @@ const colonyNetwork = new ColonyNetwork(openHarvestSigner);
 router.post('/pay', async(req,res) => {
     try{
         const colony = await colonyNetwork.getColony(process.env.HEIFER_COLONY_CONTRACT_ADDRESS!);
-        await colony.pay(req.body.farmerEthereumAddress, ethers.utils.parseUnits(req.body.amount));
+        const response = await colony.pay(req.body.farmerEthereumAddress, ethers.utils.parseUnits(req.body.amount));
         res.status(200).json({payment_status : "success"});
     }catch(e){
         res.status(400).json({error: e})
