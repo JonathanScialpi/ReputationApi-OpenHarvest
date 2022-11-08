@@ -2,7 +2,6 @@ import express from "express";
 import { AwsKmsSigner } from "../web3/AwsKmsSigner";
 import { gnosisConnection } from "../web3/authentication-functions";
 import { ColonyNetwork } from '@colony/sdk';
-import { read } from "fs";
 
 const router = express.Router();
 const dotenv = require('dotenv');
