@@ -2,6 +2,7 @@ import express from "express";
 import { AwsKmsSigner } from "../web3/AwsKmsSigner";
 import { gnosisConnection } from "../web3/authentication-functions";
 import { ColonyNetwork } from '@colony/sdk';
+import { read } from "fs";
 
 const router = express.Router();
 const dotenv = require('dotenv');
@@ -15,6 +16,12 @@ const openHarvestSigner = new AwsKmsSigner(process.env.OPEN_HARVEST_KEY_ID!, pro
 // connect OH account to Heifer colony
 const colonyNetwork = new ColonyNetwork(openHarvestSigner);
 
+const cooperativeToDomainMapping = {
+    "Mthiransembe" : "4",
+    "Machichi" : "2",
+    "Dambo La Nyumba" : "5"
+}
+
 /// @notice Rest endpoint responsible for paying 
 /// @param amount (STRING) the total amount of reputation tokens to be sent to the farmer's address
 /// @param farmerEthereumAddress (STRING)  the address we are sending the reputation payment to
@@ -22,7 +29,11 @@ const colonyNetwork = new ColonyNetwork(openHarvestSigner);
 router.post('/pay', async(req,res) => {
     try{
         const colony = await colonyNetwork.getColony(process.env.HEIFER_COLONY_CONTRACT_ADDRESS!);
-        const response = await colony.pay(req.body.farmerEthereumAddress, ethers.utils.parseUnits(req.body.amount));
+        if(req.body.coop){
+            await colony.pay(req.body.farmerEthereumAddress, ethers.utils.parseUnits(req.body.amount), cooperativeToDomainMapping[req.body.coop]);
+        }else{
+            await colony.pay(req.body.farmerEthereumAddress, ethers.utils.parseUnits(req.body.amount));
+        }
         res.status(200).json({payment_status : "success"});
     }catch(e){
         res.status(400).json({error: e})
