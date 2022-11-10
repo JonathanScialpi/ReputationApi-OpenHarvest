@@ -5,7 +5,7 @@ require('dotenv').config();
 import express from "express";
 const keyManagementRoute = require('./routes/key-management-route');
 const reputationRoute = require('./routes/reputation-route');
-const port = process.env.PORT;
+const port = process.env.LISTEN_PORT;
 const app = express();
 
 // middleware
